@@ -1,2 +1,3 @@
 # CampTrack
-School Project
+School Project - Keeps track of your campstorage
+HBO-ICT - ICT & Technology - Fontys Hogeschool
