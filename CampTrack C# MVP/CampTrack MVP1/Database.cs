@@ -188,15 +188,64 @@ namespace CampTrack_MVP1
             return clientID;
         }
 
-        public string LoadLicensePlate(string clientID)
+        public string[] LoadLicensePlate(string clientID, int count)
         {
-            string licensePlate = loadValue("SELECT licenseplate FROM object WHERE clientid=?value", clientID);
-            return licensePlate;
+            //string licensePlate = loadValue("SELECT licenseplate FROM object WHERE clientid=?value", clientID);
+            //return licensePlate;
+
+            MySqlConnection cnn = new MySqlConnection(StrProvider);
+            MySqlCommand cmd = cnn.CreateCommand();
+            cmd.CommandText = "SELECT licenseplate FROM object WHERE clientid=?clientid";
+            cmd.Parameters.AddWithValue("?clientid", clientID);
+            MySqlDataReader reader;
+
+            try
+            {
+                cnn.Open();
+
+                reader = cmd.ExecuteReader();
+                if (reader.HasRows)
+                {
+
+                    while (reader.Read())
+                    {
+                        //string[] licensePlates = new string[count];
+                        
+
+
+                        string[] licensePlates = { reader.GetString(0), "TT55RR", "87HHJ9" };
+                        /*
+                        for (int i = 0; i < count; i++)
+                        {
+                            licensePlates[i] = reader.GetString(i);
+                            Console.WriteLine("tellen: " + i);
+                        }
+                        */
+                        return licensePlates;
+
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("No value found.");
+                }
+
+                cnn.Close();
+
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+            }
+
+            return null;
+
+
         }
 
-        public bool LoadParked(string clientID)
+        public bool LoadParked(string licensePlate)
         {
-            bool parked = loadBool("SELECT parked FROM object WHERE clientid=?value", clientID);
+            bool parked = loadBool("SELECT parked FROM object WHERE licenseplate=?value", licensePlate);
             return parked;
         }
 
